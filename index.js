@@ -121,10 +121,10 @@ const keys = {
     },
 }
 
-const projectileColor = "white"
-const asteroidStroke = "white"
-const SPEED = 3
-const ROTATIONAL_SPEED = 0.05
+const projectileColor = "cyan"
+let asteroidStroke = "cyan"
+const SPEED = 3 // normally 3 but if it 10 or more the asteroids will get deleted when u touch them while pressing w
+const ROTATIONAL_SPEED = 1 // normaally 0.05 over 1 it will bounce away asteroids and make the asteroids a random color
 const FRICTION = 0.97
 const PROJECTILE_SPEED = 3
 
@@ -261,19 +261,97 @@ function animate(){
         const asteroid = asteroids[i]
         asteroid.update()
         //gameover
-        if (circleTriangleCollision(asteroid, player.getVertices())){
+        if (SPEED >= 10 && keys.w.pressed && circleTriangleCollision(asteroid, player.getVertices())){
+            asteroids.splice(i, 1)
+        }
+        else if (ROTATIONAL_SPEED >= 1 && keys.a.pressed && circleTriangleCollision(asteroid, player.getVertices())){
+            asteroid.velocity.x = Math.cos(135) * SPEED
+            asteroid.velocity.y = Math.sin(135) * SPEED
+            switch(Math.floor(Math.random() * 10)){
+                case 0:
+                    asteroidStroke = "white"
+                    break;
+                case 1:
+                    asteroidStroke = "red"
+                    break;
+                case 2:
+                    asteroidStroke = "orange"
+                    break;
+                case 3:
+                    asteroidStroke = "yellow"
+                    break;
+                case 4:
+                    asteroidStroke = "green"
+                    break;
+                case 5:
+                    asteroidStroke = "cyan"
+                    break;
+                case 6:
+                    asteroidStroke = "blue"
+                    break;
+                case 7:
+                    asteroidStroke = "purple"
+                    break;
+                case 8:
+                    asteroidStroke = "pink"
+                    break;
+                case 9:
+                    asteroidStroke = "lime"
+                    break;
+            }
+        }
+        else if (ROTATIONAL_SPEED >= 1 && keys.d.pressed && circleTriangleCollision(asteroid, player.getVertices())){
+            asteroid.velocity.x = Math.cos(45) * SPEED
+            asteroid.velocity.y = Math.sin(45) * SPEED
+            switch(Math.floor(Math.random() * 10)){
+                case 0:
+                    asteroidStroke = "white"
+                    break;
+                case 1:
+                    asteroidStroke = "red"
+                    break;
+                case 2:
+                    asteroidStroke = "orange"
+                    break;
+                case 3:
+                    asteroidStroke = "yellow"
+                    break;
+                case 4:
+                    asteroidStroke = "green"
+                    break;
+                case 5:
+                    asteroidStroke = "cyan"
+                    break;
+                case 6:
+                    asteroidStroke = "blue"
+                    break;
+                case 7:
+                    asteroidStroke = "purple"
+                    break;
+                case 8:
+                    asteroidStroke = "pink"
+                    break;
+                case 9:
+                    asteroidStroke = "lime"
+                    break;
+            }
+            
+        }
+        else if (circleTriangleCollision(asteroid, player.getVertices())){
             console.log("GAME OVER")
             window.cancelAnimationFrame(animationId)
             clearInterval(intervalId)
             const gameover = "Game Over"
             const playagain = "refresh to play again"
-            contet.foxnt = "bold 100px sans-serif"
+            context.font = "bold 100px sans-serif"
             context.fillStyle = "red"
             context.fillText(gameover, canvas.width/2, canvas.height/2)
             context.font = "italic 25px sans-serif"
             const randomx = Math.round(Math.random() * 30 + 10)
             context.fillText(playagain, player.position.x - randomx, player.position.y + 30)
-        }    
+        }
+        
+
         //asteroids trash can
     if(asteroid.position.x + asteroid.radius < 0 || asteroid.position.x - asteroid.radius > canvas.width || asteroid.position.y - asteroid.radius > canvas.height || asteroid.position.y + asteroid.radius < 0){
         asteroids.splice(i, 1)
